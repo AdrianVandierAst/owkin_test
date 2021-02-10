@@ -3,15 +3,21 @@ Test Owkin Adrian Vandier Ast
 
 Le but est de réaliser une API qui permet une analyse et une execution asynchrone d'un dockerfile en environment sécurisé.
 Le projet sera en python et utilisera poetry pour la gestion des dépendances et du virtualenv.
+
 Nous allons utiliser flask et celery pour l'api et les jobs asynchrones parcequ'ils sont simples et flexibles. En première approche, c'est suffisant.
 L'api se basera sur des jobs donc il ne sera pas utile d'utiliser un serveur asynchrone (asyncio/Fastapi), un serveur web classique en WSGI est suffisant.
+
 Il n'y a que le statut du job ainsi qu'un résultat à conserver donc une base de données relationelle n'est pas utile.
 Nous utiliserons un redis comme broker et comme backend pour les résultats.
 Un passage à rabbitmq ou autre backend spécialisé dans les queues pourra se faire si les performances deviennent un critère et qu'on doit scaler.
+
 On écrira le contenu du dockerfile dans le contenu de la task celery. Ils seraient plus propre d'enregistrer de manière séparé le dockerfile (dans une autre instance de redis par exemple) afin de pouvoir le chiffrer facilement.
 L'infra se composera d'au moins un serveur Web, d'un worker celery et du serveur redis.
+
 Le worker celery pourra être placé sur une machine où on peut facilement gêrer la sécurité. Le seul accès nécessaire est un accès au serveur redis et un accès à un environment docker sécurisé.
+
 L'api sera en REST pour que ce soit simple d'utilisation. Nous n'utiliserons pas de package python dédié pour ça, les routes et réponses sont très simples, un simple marshmallow pour gérer la sérialisation/déserialisation sera suffisant.
+
 L'api et le worker sont stateless donc duplicables. Le point central de frein pour la scalabilité de la solution sera les serveurs de backend pour celery (redis fera l'affaire pour le moment).
 Ce projet ne gérera pas la partie authentification et limitation des appels. On part du principe qu'un serveur dédié à authentifier les appels et à les limiter si besoin se trouvera en frontal.
 
@@ -20,6 +26,7 @@ Les tests seront des tests d'intégration basés sur des appels d'api. Les tests
 
 Une partie importante du projet est l'analyse des vulnérabilités d'un dockerfile et le run du container pour récupérer un résultat.
 Cette partie pourrait être réalisé en parallèle dans le cadre d'un travail d'équipe. Une première étape serait de faire un état de l'art pour savoir comment réaliser proprement cet objectif.
+
 Une recherche rapide sur internet (https://www.grottedubarbu.fr/docker-scan-vuln-container/) nous donne quelques outils. Nous allons utiliser trivy en mode containerisé pour faire l'analyse dans un premier temps.
 Le dockerfile pour trivy sera récupéré depuis le répo dockerhub. Il faudrait s'assurer que l'image est à jour au niveau de se base de vulnérabilités et que l'image est bien la bonne pour éviter qu'il y ait des vulnérabilités dans notre outil de detection de vulnérabilités...
 Le lancement de trivy ainsi que le build et le run du dockerfile seront réalisé avec docker-py pour commander l'infra docker depuis python.
