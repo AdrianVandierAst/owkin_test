@@ -23,7 +23,7 @@ def post_dockerfile():
     dockerfile = request.files["file"]
 
     # TODO: We should check for encoding of the file.
-    task = analyse_dockerfile.delay(dockerfile.read(), prop)
+    task = analyse_dockerfile.delay(dockerfile.read())
     return 200, {"job_id": task.task_id}
 
 
