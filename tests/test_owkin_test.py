@@ -12,7 +12,11 @@ def test_basic_dockerfile(dockerfile_example):
     job_id = response.json()["job_id"]
 
     # We retry during 30s (a random chosen duration for the moment).
-    @retry(stop=stop_after_delay(30), retry=retry_if_exception_type(StillRunning), reraise=True)
+    @retry(
+        stop=stop_after_delay(30),
+        retry=retry_if_exception_type(StillRunning),
+        reraise=True,
+    )
     def get_response():
         response = requests.get(f"/{job_id}")
         assert response.status_code == 200
