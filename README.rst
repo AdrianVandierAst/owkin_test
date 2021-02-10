@@ -62,8 +62,7 @@ Ce qu'il reste à faire:
 - Ajouter une propagation d'un correlation-Id entre les appels à l'api et les jobs afin de pouvoir identifier facilement le cheminement dans les logs.
 - Il faut déterminer si on a le droit de conserver les dockerfile. Si jamais il y a un bug, il nous permettrait de plus facilement reproduire le problème.
 - Pour que la mise en production se passe bien, il faudra penser à connecter le monitoring de l'infra et la récupération des logs.
-- Réfléchir plus longuement à la sécurité du système: donne-t-on trop de droit à un container, la suppresion du network suffit il à avoir un env docker sécurisé, la base de vulnérabilité de triby est elle à jour quand on procède comme on l'a fait,
-    a-t-on une image trivy en laquelle on peut avoir confiance, le build d'une image utilisant un dockerfile non maitrisé est il une faille de sécurité et comment valider le contenu du dockerfile avant ce build.
+- Réfléchir plus longuement à la sécurité du système: donne-t-on trop de droit à un container, la suppresion du network suffit il à avoir un env docker sécurisé, la base de vulnérabilité de triby est elle à jour quand on procède comme on l'a fait, a-t-on une image trivy en laquelle on peut avoir confiance, le build d'une image utilisant un dockerfile non maitrisé est il une faille de sécurité et comment valider le contenu du dockerfile avant ce build.
 - Ajouter une gestion d'erreur et de sérialisation/déserialisation des objets de l'api et des réponses des tasks plus propre.
 - Ajouter une lib pour la génération automatique de la documentation openapi (flasgger par exemple).
 - Ajouter un vrai README de description du projet et des différentes commandes pour lancer les tests, etc.
